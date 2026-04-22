@@ -1,0 +1,90 @@
+:root {
+  --primary-color: red;
+  --background-color: black;
+
+  --base-font: "Arial", sans-serif;
+}
+
+*,
+::after,
+::before {
+  box-sizing: border-box;
+}
+
+body {
+  background-color: var(--background-color);
+}
+
+h1 {
+  font-family: var(--background-color);
+  font-size: 3rem;
+  line-height: 4rem;
+  text-align: center;
+
+  width: 80vw;
+  max-width: 30em;
+
+  color: var(--primary-color);
+}
+
+p {
+  text-align: center;
+  color: var(--primary-color);
+}
+
+.whats-your-name {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.daily-quote {
+  display: none;
+}
+
+.vraag-form {
+  font-family: var(--base-font);
+  color: red;
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+
+  fieldset {
+    display: flex;
+    flex-direction: column;
+    border: none;
+    gap: 0.5rem;
+  }
+
+  label {
+    /* text inputs*/
+    &:has(input[type="text"]) {
+      gap: 0.5rem;
+      input {
+        border: red 1px solid;
+        padding: 0.5rem;
+        border-radius: 1rem;
+      }
+    }
+
+    /* radio buttons */
+    &:has(input[type="radio"]) {
+      border: red 1px solid;
+      height: 2em;
+      border-radius: 1em;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+
+      &:has(input:checked) {
+        background-color: red;
+        color: white;
+      }
+    }
+
+    input {
+      /* margin: 1em 0em; */
+      appearance: none;
+    }
+  }
+}

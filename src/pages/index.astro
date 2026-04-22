@@ -17,35 +17,156 @@ console.log(quotes);
     <link rel="stylesheet" href="styles/style.css" />
     <meta name="viewport" content="width=device-width" />
     <meta name="generator" content={Astro.generator} />
+    <link rel="stylesheet" href="src/styles/style.css" />
     <title>Astro</title>
   </head>
   <body>
     <main>
-      <h1>{quotes[0].quote}</h1>
-    </main>
-    <!-- -------------------------------------------------------------------------------------------------- -->
-    <!-- <form class="form"> -->
-    <!-- https://claude.ai/share/c05c9d04-a1e4-4a1b-9296-a17b1b5868d4 -->
-    <!-- <label for="name"
-        >What is your name?<input
-          type="text"
-          name="name"
-          id="name"
-          placeholder="Name here"
-          required
-          pattern="^(?!.*\d)[a-zA-ZÀ-ÿ](?:[a-zA-ZÀ-ÿ ]{0,48}[a-zA-ZÀ-ÿ])?$"
-        /></label
-      >
-      <button>Opslaan</button>
-    </form> -->
+      <div id="whats-your-name">
+        <form class="form">
+          <!-- https://claude.ai/share/c05c9d04-a1e4-4a1b-9296-a17b1b5868d4 -->
+          <label for="name"
+            >What is your name?<input
+              type="text"
+              name="name"
+              id="name"
+              placeholder="Name here"
+              required
+              pattern="^(?!.*\d)[a-zA-ZÀ-ÿ](?:[a-zA-ZÀ-ÿ ]{0,48}[a-zA-ZÀ-ÿ])?$"
+            /></label
+          >
+          <button>Opslaan</button>
+        </form>
+        <form class="vraag-form">
+          <!-- https://claude.ai/share/c05c9d04-a1e4-4a1b-9296-a17b1b5868d4 -->
+          <label for="vraag-1"
+            >How do you feel right now in one or two words?<input
+              type="text"
+              name="vraag-1"
+              id="vraag-1"
+              placeholder="Awnser here"
+              required
+            /></label
+          >
+          <label for="vraag-2"
+            >How would you describe your current energy level?<input
+              type="text"
+              name="vraag-2"
+              id="vraag-2"
+              placeholder="Awnser here"
+              required
+              pattern="^(?!.*\d)[a-zA-ZÀ-ÿ](?:[a-zA-ZÀ-ÿ ]{0,48}[a-zA-ZÀ-ÿ])?$"
+            /></label
+          >
+          <fieldset>
+            <legend
+              >Which of these emotions best matches your current mood?</legend
+            >
+            <label for="vraag-3-1"
+              >Happy / content<input
+                type="radio"
+                name="vraag-3"
+                id="vraag-3-1"
+                placeholder="Awnser here"
+                required
+              /></label
+            >
+            <label for="vraag-3-2"
+              >Stressed<input
+                type="radio"
+                name="vraag-3"
+                id="vraag-3-2"
+                placeholder="Awnser here"
+                required
+              /></label
+            >
+            <label for="vraag-3-3"
+              >overwhelmed - Motivated<input
+                type="radio"
+                name="vraag-3"
+                id="vraag-3-3"
+                placeholder="Awnser here"
+                required
+              /></label
+            ><label for="vraag-3-4"
+              >hopeful - Indifferent<input
+                type="radio"
+                name="vraag-3"
+                id="vraag-3-4"
+                placeholder="Awnser here"
+                required
+              /></label
+            >
+            <label for="vraag-3-5"
+              >numb<input
+                type="radio"
+                name="vraag-3"
+                id="vraag-3-5"
+                placeholder="Awnser here"
+                required
+              /></label
+            >
+          </fieldset>
 
-    <!-- <script>
+          <label for="vraag-4"
+            >What do you need most right now?<input
+              type="text"
+              name="vraag-4"
+              id="vraag-4"
+              placeholder="Awnser here"
+              required
+            /></label
+          >
+          <fieldset>
+            <legend
+              >How do you feel about the near future (today / tomorrow)?</legend
+            >
+            <label for="vraag-5-1"
+              >Positive<input
+                type="radio"
+                name="vraag-5"
+                id="vraag-5-1"
+                placeholder="Awnser here"
+                required
+              /></label
+            >
+            <label for="vraag-5-2"
+              >Neutral<input
+                type="radio"
+                name="vraag-5"
+                id="vraag-5-2"
+                placeholder="Awnser here"
+                required
+              /></label
+            >
+            <label for="vraag-5-3"
+              >Negative<input
+                type="radio"
+                name="vraag-5"
+                id="vraag-5-3"
+                placeholder="Awnser here"
+                required
+              /></label
+            >
+          </fieldset>
+          <button>Opslaan</button>
+        </form>
+      </div>
+      <div class="daily-quote">
+        <p>hoi</p>
+        <h1>{quotes[0].quote}</h1>
+        <p>- {quotes[0].author} -</p>
+      </div>
+    </main>
+
+    <!-- -------------------------------------------------------------------------------------------------- -->
+
+    <script>
       // Hier check ik of er al een naam staat door em op te vragen
       const savedName = localStorage.getItem("name");
 
       //  Hier selecteer ik het formulier
       const form = document.querySelector(".form");
-      const question1 = document.querySelector(".vraag-1-form");
 
       //   als er een naam is, verberg het formulier, anders laat het zien
       if (savedName) {
@@ -60,13 +181,18 @@ console.log(quotes);
       }
 
       // Hier sla ik de naam op in localStorage en verberg het formulier
-      function saveData() {
+      function nameData() {
         const name = document.getElementById("name").value;
+
         localStorage.setItem("name", name);
+
         console.log("Data saved:", name);
+
         form.style.display = "none";
-        question1.style.display = "block";
+        questions.style.display = "block";
       }
+
+      function formData(params) {}
 
       // Hier voorkom ik dat het formulier de pagina herlaadt bij het submitten en roep ik de saveData functie aan
       function formSubmit(event) {
@@ -74,6 +200,6 @@ console.log(quotes);
         console.log("Form submitted");
         saveData();
       }
-    </script> -->
+    </script>
   </body>
 </html>
