@@ -1,0 +1,79 @@
+---
+const res = await fetch("https://api.api-ninjas.com/v2/quotes", {
+  headers: {
+    "x-api-key": import.meta.env.API_KEY,
+  },
+});
+const quotes = await res.json();
+
+console.log(quotes);
+---
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" href="/favicon.ico" />
+    <link rel="stylesheet" href="styles/style.css" />
+    <meta name="viewport" content="width=device-width" />
+    <meta name="generator" content={Astro.generator} />
+    <title>Astro</title>
+  </head>
+  <body>
+    <main>
+      <h1>{quotes[0].quote}</h1>
+    </main>
+    <!-- -------------------------------------------------------------------------------------------------- -->
+    <!-- <form class="form"> -->
+    <!-- https://claude.ai/share/c05c9d04-a1e4-4a1b-9296-a17b1b5868d4 -->
+    <!-- <label for="name"
+        >What is your name?<input
+          type="text"
+          name="name"
+          id="name"
+          placeholder="Name here"
+          required
+          pattern="^(?!.*\d)[a-zA-ZÀ-ÿ](?:[a-zA-ZÀ-ÿ ]{0,48}[a-zA-ZÀ-ÿ])?$"
+        /></label
+      >
+      <button>Opslaan</button>
+    </form> -->
+
+    <!-- <script>
+      // Hier check ik of er al een naam staat door em op te vragen
+      const savedName = localStorage.getItem("name");
+
+      //  Hier selecteer ik het formulier
+      const form = document.querySelector(".form");
+      const question1 = document.querySelector(".vraag-1-form");
+
+      //   als er een naam is, verberg het formulier, anders laat het zien
+      if (savedName) {
+        form.style.display = "none";
+      } else {
+        form.style.display = "block";
+      }
+
+      //   als er een formulier is, voeg een event listener toe voor het submitten van het formulier
+      if (form) {
+        form.addEventListener("submit", formSubmit);
+      }
+
+      // Hier sla ik de naam op in localStorage en verberg het formulier
+      function saveData() {
+        const name = document.getElementById("name").value;
+        localStorage.setItem("name", name);
+        console.log("Data saved:", name);
+        form.style.display = "none";
+        question1.style.display = "block";
+      }
+
+      // Hier voorkom ik dat het formulier de pagina herlaadt bij het submitten en roep ik de saveData functie aan
+      function formSubmit(event) {
+        event.preventDefault();
+        console.log("Form submitted");
+        saveData();
+      }
+    </script> -->
+  </body>
+</html>
