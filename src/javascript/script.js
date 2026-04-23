@@ -141,6 +141,8 @@ function awnsersSubmit(event) {
   dataQuestions();
 }
 
+
+// https://claude.ai/share/db831160-0686-41d3-94e8-bc0643b89679
 function clearAnswersIfNewDay() {
   const today = new Date().toDateString();
   const lastVisit = localStorage.getItem("lastVisitDate");
