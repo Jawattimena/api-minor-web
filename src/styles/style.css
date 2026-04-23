@@ -1,89 +1,171 @@
-:root {
-  --primary-color: red;
-  --background-color: black;
+@font-face {
+  font-family: "Montserat";
+  src: url(/src/fonts/Montserrat-VariableFont_wght.ttf);
+}
 
-  --base-font: "Arial", sans-serif;
+@font-face {
+  font-family: "Montserat Italic";
+  src: url(/src/fonts/Montserrat-Italic-VariableFont_wght.ttf);
+}
+
+:root {
+  --font-primary-color: rgb(255, 255, 255);
+  --background-color: black;
+  --base-font: "Montserat";
+  --italic-font: "Montserat Italic";
+  
+  --font-wght-light: 300;
+  --font-wght-reg: 500;
+  --font-wght-bold: 700;
+  
 }
 
 *,
 ::after,
 ::before {
   box-sizing: border-box;
+  font-family: var(--base-font);
+  margin: 0em;
+  padding: 0em;
 }
 
 body {
   background-color: var(--background-color);
+  overflow: hidden;
 }
 
-h1 {
-  font-family: var(--background-color);
-  font-size: 3rem;
-  line-height: 4rem;
-  text-align: center;
+#forms {
 
-  width: 80vw;
-  max-width: 30em;
-
-  color: var(--primary-color);
-}
-
-p {
-  text-align: center;
-  color: var(--primary-color);
-}
-
-.whats-your-name {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-
-.daily-quote {
-  display: none;
-}
-
-.vraag-form {
-  font-family: var(--base-font);
-  color: red;
-  display: flex;
-  flex-direction: column;
-  gap: 2rem;
-
-  fieldset {
-    display: flex;
+  #formName{
+    /* display: flex; is te vinden in javaScript*/
     flex-direction: column;
-    border: none;
-    gap: 0.5rem;
+
+    button {
+      align-self: end;
+    }
   }
 
-  label {
-    /* text inputs*/
-    &:has(input[type="text"]) {
-      gap: 0.5rem;
-      input {
-        border: red 1px solid;
-        padding: 0.5rem;
-        border-radius: 1rem;
-      }
-    }
+  #formQuestions {
+    font-family: var(--base-font);
+    color: var(--font-primary-color);
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+  }
+}
 
-    /* radio buttons */
-    &:has(input[type="radio"]) {
-      border: red 1px solid;
-      height: 2em;
-      border-radius: 1em;
-      display: flex;
-      justify-content: center;
-      align-items: center;
+#dailyQuote {
+  
+  display: none;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 1rem;
+  
+  
+  h1 {
+    font-size: 3rem;
+    font-weight: var(--font-wght-reg);
+    line-height: 4rem;
+    margin: .5em 0 0 0  ;
+    text-align: center;
+  
+    width: 80vw;
+    max-width: 30em;
+  
+    color: var(--font-primary-color);
+  }
+  
+  p {
+    font-size: 1.5rem;
+    font-weight: var(--font-wght-light);
+    color: var(--font-primary-color);
+
+    &:nth-of-type(2) {
+      font-size: 1rem;
+      font-family: var(--italic-font);
+      font-weight: var(--font-wght-light);
+      margin: 0 0 2rem 0;
+    }
+  }
+}
+
+/* Components ---------------------------------------- */
+
+/* Buttons */
+button {
+  font-weight: var(--font-wght-reg);
+  padding: 1rem 2rem;
+  appearance: none;
+  border: red 1px solid;
+  border-radius: 2rem;   
+  cursor: pointer; 
+  background-color: red;
+  color: white;
+  width: fit-content;
+  
+  &:hover {
+    background-color: red;
+    color: black;
+  }
+
+  &:active {
+    background-color: darkred;
+    color: black;
+  }
+}
+
+/* Text inputs */
+
+label {
+  font-family: var(--base-font);
+  font-size: 1.5rem;
+  color: white;
+  font-weight: var(--font-wght-reg);
+  width: 100%;
+}
+
+input[type="text"] {
+  appearance: none;
+  border: gray 1px solid;  
+  margin: 1rem 0rem;
+  padding: 1em;
+  border-radius: 2em;
+  
+}
+
+/* Radio inputs */
+fieldset:has(input[type="radio"]){
+  border: none;
+  display: grid;
+  flex-direction: column;
+  gap: 1rem;
+  grid-template-columns: repeat(auto-fill, minmax(10em, 1fr));
+
+  legend{
+    margin: 0 0 1rem 0;
+    
+  }
+
+  label{
+    padding: 2rem 1rem;
+    width: 100%;
+    border: red 1px solid;
+    background-color: white;
+    color: black;
+    height: 2em;
+    border-radius: 1em;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 
       &:has(input:checked) {
         background-color: red;
         color: white;
       }
-    }
+    
 
-    input {
-      /* margin: 1em 0em; */
+    input{
       appearance: none;
     }
   }

@@ -22,8 +22,8 @@ console.log(quotes);
   </head>
   <body>
     <main>
-      <div id="whats-your-name">
-        <form class="form">
+      <div id="forms">
+        <form id="formName">
           <!-- https://claude.ai/share/c05c9d04-a1e4-4a1b-9296-a17b1b5868d4 -->
           <label for="name"
             >What is your name?<input
@@ -37,10 +37,10 @@ console.log(quotes);
           >
           <button>Opslaan</button>
         </form>
-        <form class="vraag-form">
+        <form id="formQuestions">
           <!-- https://claude.ai/share/c05c9d04-a1e4-4a1b-9296-a17b1b5868d4 -->
           <label for="vraag-1"
-            >How do you feel right now in one or two words?<input
+            >How do you feel right now in a few words?<input
               type="text"
               name="vraag-1"
               id="vraag-1"
@@ -48,60 +48,88 @@ console.log(quotes);
               required
             /></label
           >
-          <label for="vraag-2"
-            >How would you describe your current energy level?<input
-              type="text"
-              name="vraag-2"
-              id="vraag-2"
-              placeholder="Awnser here"
-              required
-              pattern="^(?!.*\d)[a-zA-ZÀ-ÿ](?:[a-zA-ZÀ-ÿ ]{0,48}[a-zA-ZÀ-ÿ])?$"
-            /></label
-          >
+          <fieldset>
+            <legend>How would you describe your current energy level?</legend>
+            <label for="Very low"
+              >Very low<input
+                type="radio"
+                name="vraag-2"
+                id="Very low"
+                required
+              /></label
+            >
+            <label for="Neutral"
+              >Neutral<input
+                type="radio"
+                name="vraag-2"
+                id="Neutral"
+                required
+              /></label
+            >
+            <label for="High"
+              >High<input
+                type="radio"
+                name="vraag-2"
+                id="High"
+                required
+              /></label
+            >
+          </fieldset>
+
           <fieldset>
             <legend
               >Which of these emotions best matches your current mood?</legend
             >
-            <label for="vraag-3-1"
-              >Happy / content<input
+            <label for="Happy"
+              >Happy<input
                 type="radio"
                 name="vraag-3"
-                id="vraag-3-1"
+                id="Happy"
                 placeholder="Awnser here"
                 required
               /></label
             >
-            <label for="vraag-3-2"
+            <label for="Stressed"
               >Stressed<input
                 type="radio"
                 name="vraag-3"
-                id="vraag-3-2"
+                id="Stressed"
                 placeholder="Awnser here"
                 required
               /></label
             >
-            <label for="vraag-3-3"
-              >overwhelmed - Motivated<input
+            <label for="overwhelmed"
+              >Overwhelmed<input
                 type="radio"
                 name="vraag-3"
-                id="vraag-3-3"
-                placeholder="Awnser here"
-                required
-              /></label
-            ><label for="vraag-3-4"
-              >hopeful - Indifferent<input
-                type="radio"
-                name="vraag-3"
-                id="vraag-3-4"
+                id="overwhelmed"
                 placeholder="Awnser here"
                 required
               /></label
             >
-            <label for="vraag-3-5"
-              >numb<input
+            <label for="hopeful"
+              >Hopeful<input
                 type="radio"
                 name="vraag-3"
-                id="vraag-3-5"
+                id="hopeful"
+                placeholder="Awnser here"
+                required
+              /></label
+            >
+            <label for="Motivated"
+              >Motivated<input
+                type="radio"
+                name="vraag-3"
+                id="Motivated"
+                placeholder="Awnser here"
+                required
+              /></label
+            >
+            <label for="Indifferent"
+              >Indifferent<input
+                type="radio"
+                name="vraag-3"
+                id="Indifferent"
                 placeholder="Awnser here"
                 required
               /></label
@@ -121,29 +149,29 @@ console.log(quotes);
             <legend
               >How do you feel about the near future (today / tomorrow)?</legend
             >
-            <label for="vraag-5-1"
+            <label for="Positive"
               >Positive<input
                 type="radio"
                 name="vraag-5"
-                id="vraag-5-1"
+                id="Positive"
                 placeholder="Awnser here"
                 required
               /></label
             >
-            <label for="vraag-5-2"
+            <label for="Neutral"
               >Neutral<input
                 type="radio"
                 name="vraag-5"
-                id="vraag-5-2"
+                id="Neutral"
                 placeholder="Awnser here"
                 required
               /></label
             >
-            <label for="vraag-5-3"
+            <label for="Negative"
               >Negative<input
                 type="radio"
                 name="vraag-5"
-                id="vraag-5-3"
+                id="Negative"
                 placeholder="Awnser here"
                 required
               /></label
@@ -152,54 +180,13 @@ console.log(quotes);
           <button>Opslaan</button>
         </form>
       </div>
-      <div class="daily-quote">
-        <p>hoi</p>
+      <div id="dailyQuote">
+        <p id="begroeting"></p>
         <h1>{quotes[0].quote}</h1>
         <p>- {quotes[0].author} -</p>
+        <button>Save quote</button>
       </div>
     </main>
-
-    <!-- -------------------------------------------------------------------------------------------------- -->
-
-    <script>
-      // Hier check ik of er al een naam staat door em op te vragen
-      const savedName = localStorage.getItem("name");
-
-      //  Hier selecteer ik het formulier
-      const form = document.querySelector(".form");
-
-      //   als er een naam is, verberg het formulier, anders laat het zien
-      if (savedName) {
-        form.style.display = "none";
-      } else {
-        form.style.display = "block";
-      }
-
-      //   als er een formulier is, voeg een event listener toe voor het submitten van het formulier
-      if (form) {
-        form.addEventListener("submit", formSubmit);
-      }
-
-      // Hier sla ik de naam op in localStorage en verberg het formulier
-      function nameData() {
-        const name = document.getElementById("name").value;
-
-        localStorage.setItem("name", name);
-
-        console.log("Data saved:", name);
-
-        form.style.display = "none";
-        questions.style.display = "block";
-      }
-
-      function formData(params) {}
-
-      // Hier voorkom ik dat het formulier de pagina herlaadt bij het submitten en roep ik de saveData functie aan
-      function formSubmit(event) {
-        event.preventDefault();
-        console.log("Form submitted");
-        saveData();
-      }
-    </script>
+    <script src="../javascript/script.js"></script>
   </body>
 </html>
