@@ -1,3 +1,5 @@
+clearAnswersIfNewDay();
+
 // Hier check ik of er al een naam staat door em op te vragen
 // https://chatgpt.com/share/69ea01f3-df60-83eb-a265-d045b4583faf
 const savedName = localStorage.getItem("name");
@@ -137,4 +139,20 @@ function awnsersSubmit(event) {
   // event.preventDefault();
   console.log("Form submitted");
   dataQuestions();
+}
+
+function clearAnswersIfNewDay() {
+  const today = new Date().toDateString();
+  const lastVisit = localStorage.getItem("lastVisitDate");
+
+  if (lastVisit !== today) {
+    localStorage.removeItem("How do you feel right now in a few words?");
+    localStorage.removeItem("How would you describe your current energy level?");
+    localStorage.removeItem("Which of these emotions best matches your current mood?");
+    localStorage.removeItem("What do you need most right now?");
+    localStorage.removeItem("How do you feel about the near future (today / tomorrow)?");
+
+    localStorage.setItem("lastVisitDate", today);
+    console.log("New day — answers cleared.");
+  }
 }
