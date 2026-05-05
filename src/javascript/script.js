@@ -158,3 +158,32 @@ function clearAnswersIfNewDay() {
     console.log("New day — answers cleared.");
   }
 }
+
+// Prompt AI
+// Bronnen: https://developer.chrome.com/docs/ai/prompt-api?hl=nl#use_the_prompt_api
+
+const availability = await LanguageModel.availability({
+  // The same options in `prompt()` or `promptStreaming()`
+});
+
+const session = await LanguageModel.create({
+
+  // Hier download ik een model en monitor de voortgang van het downloaden
+  monitor(m) {
+    m.addEventListener('downloadprogress', (e) => {
+      console.log(`Downloaded ${e.loaded * 100}%`);
+    });
+  },
+
+  initialPrompts: [
+    { role: 'system', 
+    content: 'Je bent een AI-assistent die op Je bent een AI-assistent die op de achtergrond werkt en bepaalt welke quote uit de Content API het meest relevant is. Gebruik hiervoor de antwoorden van de gebruiker op de gestelde vragen als leidraad voor je selectie.Je bent een AI-assistent die op de achtergrond werkt en bepaalt welke quote uit de Content API het meest relevant is. Gebruik hiervoor de antwoorden van de gebruiker op de gestelde vragen als leidraad voor je selectie.Je bent een AI-assistent die op de achtergrond werkt en bepaalt welke quote uit de Content API het meest relevant is. Gebruik hiervoor de antwoorden van de gebruiker op de gestelde vragen als leidraad voor je selectie.de achtergrond werkt en bepaalt welke quote uit de Content API het meest relevant is. Kies 1 quote uit Gebruik hiervoor de antwoorden van de gebruiker op de gestelde vragen als leidraad voor je selectie.' },
+
+    { role: 'user', 
+    content: 'What is the capital of Italy?' },
+    
+  ],
+
+});
+
+

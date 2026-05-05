@@ -30,7 +30,6 @@ vandaag heb ik een local storage toegevoegd met hulp van Cyd. ik kan nu mijn naa
 ## WEEK 2
 
 Feedback: Jad
-
 Leg de focus op de content API
 
 ## Dag 3
