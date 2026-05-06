@@ -1,43 +1,51 @@
+import { json } from "astro:schema";
+
 clearAnswersIfNewDay();
 
-// Hier check ik of er al een naam staat door em op te vragen
-// https://chatgpt.com/share/69ea01f3-df60-83eb-a265-d045b4583faf
 const savedName = localStorage.getItem("name");
 
+
+// Begroeting met tijd van de dag "Good morning/afternoon/evening"
 function getGreeting() {
   const now = new Date();
-  const hour = now.getHours(); // 0–23
-
-  if (hour < 12) {
-    return "Good morning";
-  } else if (hour < 18) {
-    return "Good afternoon";
-  } else {
-    return "Good evening";
-  }
+  const hour = now.getHours();
+  if (hour < 12) return "Good morning";
+  else if (hour < 18) return "Good afternoon";
+  else return "Good evening";
 }
-// Hier laat ik de begroeting zien als er een naam is, anders blijft het leeg
+
 document.getElementById("begroeting").textContent = `👋 ${getGreeting()} ${savedName}`;
-// console.log(getGreeting());
 
-const savedAnswers = 
-   localStorage.getItem("How do you feel right now in a few words?") 
-&& localStorage.getItem("How would you describe your current energy level?") 
-&& localStorage.getItem("Which of these emotions best matches your current mood?") 
-&& localStorage.getItem("What do you need most right now?") 
-&& localStorage.getItem("How do you feel about the near future (today / tomorrow)?");
 
-//  Hier selecteer ik het formulier
+const savedAnswers =
+  localStorage.getItem("How do you feel right now in a few words?") &&
+  localStorage.getItem("How would you describe your current energy level?") &&
+  localStorage.getItem("Which of these emotions best matches your current mood?") &&
+  localStorage.getItem("What do you need most right now?") &&
+  localStorage.getItem("How do you feel about the near future (today / tomorrow)?");
+
 const formName = document.querySelector("#formName");
 const formQuestions = document.querySelector("#formQuestions");
 const dailyQuote = document.querySelector("#dailyQuote");
 
-//   als er een naam is, verberg het formulier, anders laat het zien
+
 if (savedName && savedAnswers) {
   formName.style.display = "none";
   formQuestions.style.display = "none";
-  dailyQuote.style.display = "flex"; // of "block"
-} else if (savedName) {
+  dailyQuote.style.display = "flex";
+
+  // laat de button zien als er al een quote is gekozen
+  const newDayButton = document.getElementById("newDay");
+  newDayButton.style.display = "block";    
+} 
+  const savedQuote = localStorage.getItem("dailyQuote");
+  const savedAuthor = localStorage.getItem("dailyQuoteAuthor");
+  if (savedQuote && savedAuthor) {
+    document.getElementById("quoteText").textContent = JSON.parse(savedQuote);
+    document.getElementById("quoteAuthor").textContent = `- ${JSON.parse(savedAuthor)} -`;
+  }
+
+else if (savedName) {
   formName.style.display = "none";
   formQuestions.style.display = "flex";
   dailyQuote.style.display = "none";
@@ -47,143 +55,217 @@ if (savedName && savedAnswers) {
   dailyQuote.style.display = "none";
 }
 
-//   als er een formulier is, voeg een event listener toe voor het submitten van het formulier
-if (formName) {
-  formName.addEventListener("submit", nameSubmit);
-}
+if (formName) formName.addEventListener("submit", nameSubmit);
+if (formQuestions) formQuestions.addEventListener("submit", awnsersSubmit);
 
-if (formQuestions) {
-  formQuestions.addEventListener("submit", awnsersSubmit);
-}
-
-// Hier sla ik de naam op in localStorage en verberg het formulier
 function dataName() {
   const name = document.getElementById("name").value;
-
   localStorage.setItem("name", name);
-
-  console.log("Data saved:", name);
-
   formName.style.display = "none";
   formQuestions.style.display = "flex";
 }
 
-function getSelectedRadioAnswer2(name) {
+function getSelectedRadioAnswer2() {
   const radios = document.getElementsByName("vraag-2");
-  
-  for (let radio of radios) {
-    if (radio.checked) {
-      return radio.id; 
-    }
-  }
+  for (let radio of radios) { if (radio.checked) return radio.id; }
 }
 
-// Hier haal ik de waarde van de geselecteerde radio button op voor vraag 3
-function getSelectedRadioAnswer3(name) {
+function getSelectedRadioAnswer3() {
   const radios = document.getElementsByName("vraag-3");
-  
-  for (let radio of radios) {
-    if (radio.checked) {
-      return radio.id; 
-    }
-  }
+  for (let radio of radios) { if (radio.checked) return radio.id; }
 }
 
-// Hier haal ik de waarde van de geselecteerde radio button op voor vraag 5
-function getSelectedRadioAnswer5(name) {
+function getSelectedRadioAnswer5() {
   const radios = document.getElementsByName("vraag-5");
-  
-  for (let radio of radios) {
-    if (radio.checked) {
-      return radio.id; 
-    }
-  }
+  for (let radio of radios) { if (radio.checked) return radio.id; }
 }
 
-// Hier sla ik de vragen en antwoorden op in localStorage en verberg het formulier
-// https://chatgpt.com/share/69ea00c2-6ac4-83eb-9378-aa3e2e870166
-function dataQuestions() {
-  const answer1 = document.getElementById("vraag-1").value;
-  const answer2 = getSelectedRadioAnswer2("vraag-2");
-  const answer3 = getSelectedRadioAnswer3("vraag-3");
-  const answer4 = document.getElementById("vraag-4").value;
-  const answer5 = getSelectedRadioAnswer5("vraag-5");
-
-  localStorage.setItem("How do you feel right now in a few words?", answer1);
-  localStorage.setItem("How would you describe your current energy level?", answer2);
-  localStorage.setItem("Which of these emotions best matches your current mood?", answer3);
-  localStorage.setItem("What do you need most right now?", answer4);
-  localStorage.setItem("How do you feel about the near future (today / tomorrow)?", answer5);
-
-  console.log("Data saved:", answer1);
-  console.log("Data saved:", answer2);
-  console.log("Data saved:", answer3);
-  console.log("Data saved:", answer4);
-  console.log("Data saved:", answer5);
-  //   console.log("Radio gekozen:", answer3);
-
-  formQuestions.style.display = "none";
-  dailyQuote.style.display = "flex";
-}
-
-function formData(params) {}
-
-// Hier voorkom ik dat het formulier de pagina herlaadt bij het submitten en roep ik de saveData functie aan
 function nameSubmit(event) {
   event.preventDefault();
-  console.log("Form submitted");
   dataName();
 }
 
-function awnsersSubmit(event) {
-  // event.preventDefault();
-  console.log("Form submitted");
-  dataQuestions();
+async function awnsersSubmit(event) {
+  event.preventDefault();
+  await dataQuestions();
 }
 
-
-// https://claude.ai/share/db831160-0686-41d3-94e8-bc0643b89679
+// Reset antwoorden en quote als het een nieuwe dag is 
 function clearAnswersIfNewDay() {
   const today = new Date().toDateString();
   const lastVisit = localStorage.getItem("lastVisitDate");
-
   if (lastVisit !== today) {
-    localStorage.removeItem("How do you feel right now in a few words?");
-    localStorage.removeItem("How would you describe your current energy level?");
-    localStorage.removeItem("Which of these emotions best matches your current mood?");
-    localStorage.removeItem("What do you need most right now?");
-    localStorage.removeItem("How do you feel about the near future (today / tomorrow)?");
+  localStorage.removeItem("How do you feel right now in a few words?");
+  localStorage.removeItem("How would you describe your current energy level?");
+  localStorage.removeItem("Which of these emotions best matches your current mood?");
+  localStorage.removeItem("What do you need most right now?");
+  localStorage.removeItem("How do you feel about the near future (today / tomorrow)?");
 
-    localStorage.setItem("lastVisitDate", today);
-    console.log("New day — answers cleared.");
+  // Verwijder de opgeslagen quote
+  localStorage.removeItem("dailyQuote");
+  localStorage.removeItem("dailyQuoteAuthor");
+
+  // Verwijder de datum zodat clearAnswersIfNewDay ook opnieuw werkt
+  localStorage.removeItem("lastVisitDate");
+
+  // Reset de UI
+  const newDayButton = document.getElementById("newDay"); 
+  dailyQuote.style.display = "none";
+  newDayButton.style.display = "none";
+  formQuestions.style.display = "flex";
+
+
+  // Reset de quote tekst
+  document.getElementById("quoteText").textContent = "";
+  document.getElementById("quoteAuthor").textContent = "";
   }
 }
 
-// Prompt AI
-// Bronnen: https://developer.chrome.com/docs/ai/prompt-api?hl=nl#use_the_prompt_api
+async function init() {
+  const availability = await LanguageModel.availability();
+  console.log("AI Status:", availability);
 
-const availability = await LanguageModel.availability({
-  // The same options in `prompt()` or `promptStreaming()`
-});
+  if (availability !== "available") {
+    console.log("Model nog niet klaar:", availability);
+    return;
+  }
 
-const session = await LanguageModel.create({
+// Hier download ik de prompt API
+  const session = await LanguageModel.create({
+    expectedInputLanguages: ["en"],  
+    expectedContextLanguages: ["en"],
+    monitor(m) {
+      m.addEventListener("downloadprogress", (e) => {
+        console.log(`Downloaded ${e.loaded * 100}%`);
+      });
+    },
+  });
 
-  // Hier download ik een model en monitor de voortgang van het downloaden
-  monitor(m) {
-    m.addEventListener('downloadprogress', (e) => {
-      console.log(`Downloaded ${e.loaded * 100}%`);
-    });
-  },
+  const quotesElement = document.getElementById("quotesData");
+  const quotes = JSON.parse(quotesElement.dataset.quotes);
 
-  initialPrompts: [
-    { role: 'system', 
-    content: 'Je bent een AI-assistent die op Je bent een AI-assistent die op de achtergrond werkt en bepaalt welke quote uit de Content API het meest relevant is. Gebruik hiervoor de antwoorden van de gebruiker op de gestelde vragen als leidraad voor je selectie.Je bent een AI-assistent die op de achtergrond werkt en bepaalt welke quote uit de Content API het meest relevant is. Gebruik hiervoor de antwoorden van de gebruiker op de gestelde vragen als leidraad voor je selectie.Je bent een AI-assistent die op de achtergrond werkt en bepaalt welke quote uit de Content API het meest relevant is. Gebruik hiervoor de antwoorden van de gebruiker op de gestelde vragen als leidraad voor je selectie.de achtergrond werkt en bepaalt welke quote uit de Content API het meest relevant is. Kies 1 quote uit Gebruik hiervoor de antwoorden van de gebruiker op de gestelde vragen als leidraad voor je selectie.' },
+  // Hier kies ik de quote met de Prompt API
+  async function kiesQuoteMetAI(quotes) {
+    const antwoord1 = localStorage.getItem("How do you feel right now in a few words?");
+    const antwoord2 = localStorage.getItem("How would you describe your current energy level?");
+    const antwoord3 = localStorage.getItem("Which of these emotions best matches your current mood?");
+    const antwoord4 = localStorage.getItem("What do you need most right now?");
+    const antwoord5 = localStorage.getItem("How do you feel about the near future (today / tomorrow)?");
 
-    { role: 'user', 
-    content: 'What is the capital of Italy?' },
+    const quotesLijst = quotes
+      .map((q, index) => `${index + 1}. "${q.quote}" - ${q.author}`)
+      .join("\n");
+
+      // hier word de promt uitgeschreven die aan de AI gegeven word
+      const prompt = `
+      Een gebruiker heeft de volgende vragen beantwoord:
+      1. Hoe voel je je nu? ${antwoord1}
+      2. Energieniveau: ${antwoord2}
+      3. Emotie: ${antwoord3}
+      4. Wat heb je nodig? ${antwoord4}
+      5. Gevoel over de toekomst: ${antwoord5}
+
+      Hier zijn alle beschikbare quotes:
+      ${quotesLijst}
+  
+      Lees alle quotes hierboven. Kies de quote die het beste aansluit bij hoe de gebruiker zich voelt.
+      Geef ALLEEN het nummer van de gekozen quote terug (bijvoorbeeld: 3).
+      Geen uitleg, geen tekst, alleen het getal.`;
+
+    const antwoord = await session.prompt(prompt);
+    console.log(prompt);
+    console.log(antwoord);
+    console.log(session);
+
+    // Hier check ik wat de AI teruggeeft in de console
+    console.log("AI antwoord (raw):", antwoord);
+
+    const gekozenNummer = parseInt(antwoord.trim()) - 1;
+    console.log(gekozenNummer);
+    console.log(quotes[gekozenNummer]);
+    return quotes[gekozenNummer] || quotes[0];
+
+  }
+
+  // dataQuestions heeft toegang tot kiesQuoteMetAI via init()
+  async function dataQuestions() {
+    const answer1 = document.getElementById("vraag-1").value;
+    const answer2 = getSelectedRadioAnswer2();
+    const answer3 = getSelectedRadioAnswer3();
+    const answer4 = document.getElementById("vraag-4").value;
+    const answer5 = getSelectedRadioAnswer5();
+
+    localStorage.setItem("How do you feel right now in a few words?", answer1);
+    localStorage.setItem("How would you describe your current energy level?", answer2);
+    localStorage.setItem("Which of these emotions best matches your current mood?", answer3);
+    localStorage.setItem("What do you need most right now?", answer4);
+    localStorage.setItem("How do you feel about the near future (today / tomorrow)?", answer5);
+
+    formQuestions.style.display = "none";
+    document.getElementById("begroeting").textContent = "Even geduld, er wordt een quote gekozen...";
+    dailyQuote.style.display = "flex";
+
+
+
+    const gekozenQuote = await kiesQuoteMetAI(quotes);
+
+    // Hier log ik de volledige quote in de console
+    console.log("Gekozen quote:", `"${gekozenQuote.quote}" - ${gekozenQuote.author}`);
     
-  ],
+    // Hier sla ik de quote op in localStorage
+    localStorage.setItem("dailyQuote", JSON.stringify(gekozenQuote.quote));
+    localStorage.setItem("dailyQuoteAuthor", JSON.stringify(gekozenQuote.author));
 
-});
+    const savedName = localStorage.getItem("name");
+    document.getElementById("begroeting").textContent = `👋 ${getGreeting()} ${savedName}`;
+    document.getElementById("quoteText").textContent = gekozenQuote.quote;
+    document.getElementById("quoteAuthor").textContent = `- ${gekozenQuote.author} -`;
+
+    const newDayButton = document.getElementById("newDay");
+    newDayButton.style.display = "block";    
+  }
+
+  // Overschrijf de awnsersSubmit zodat die de lokale dataQuestions gebruikt
+  if (formQuestions) {
+    formQuestions.removeEventListener("submit", awnsersSubmit);
+    formQuestions.addEventListener("submit", async (event) => {
+      event.preventDefault();
+      await dataQuestions();
+    });
+  }
+}
+
+// Functie voor simulatie new day button
+function newDay() {
+  // Verwijder alle antwoorden
+  localStorage.removeItem("How do you feel right now in a few words?");
+  localStorage.removeItem("How would you describe your current energy level?");
+  localStorage.removeItem("Which of these emotions best matches your current mood?");
+  localStorage.removeItem("What do you need most right now?");
+  localStorage.removeItem("How do you feel about the near future (today / tomorrow)?");
+
+  // Verwijder de opgeslagen quote
+  localStorage.removeItem("dailyQuote");
+  localStorage.removeItem("dailyQuoteAuthor");
+
+  // Verwijder de datum zodat clearAnswersIfNewDay ook opnieuw werkt
+  localStorage.removeItem("lastVisitDate");
+
+  // Reset de UI
+  const newDayButton = document.getElementById("newDay"); 
+  dailyQuote.style.display = "none";
+  newDayButton.style.display = "none";
+  formQuestions.style.display = "flex";
 
 
+  // Reset de quote tekst
+  document.getElementById("quoteText").textContent = "";
+  document.getElementById("quoteAuthor").textContent = "";
+
+  // Reload de pagina
+  location.reload();
+}
+// new day button
+document.getElementById("newDay").addEventListener("click", newDay);
+
+init();

@@ -137,6 +137,10 @@ button {
   }
 }
 
+#newDay{
+  display: none;
+}
+
 /* Text inputs */
 label {
   width: 100%;

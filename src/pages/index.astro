@@ -1,13 +1,12 @@
 ---
 // Bron: Samen met Jad naar gekeken
-const res = await fetch("https://api.api-ninjas.com/v2/quotes", {
+// index.astro (bovenin de ---blokken)
+const res = await fetch("https://api.api-ninjas.com/v2/quotes?limit=10", {
   headers: {
     "x-api-key": import.meta.env.API_KEY,
   },
 });
 const quotes = await res.json();
-
-console.log(quotes);
 ---
 
 <html lang="en">
@@ -33,7 +32,6 @@ console.log(quotes);
               id="name"
               placeholder="Name here"
               required
-              pattern="^(?!.*\d)[a-zA-ZÀ-ÿ](?:[a-zA-ZÀ-ÿ ]{0,48}[a-zA-ZÀ-ÿ])?$"
             /></label
           >
           <button>Opslaan</button>
@@ -182,10 +180,17 @@ console.log(quotes);
         </form>
       </div>
       <div id="dailyQuote">
+        <!-- In je HTML, voeg dit toe -->
+        <div
+          id="quotesData"
+          data-quotes={JSON.stringify(quotes)}
+          style="display:none"
+        >
+        </div>
         <p id="begroeting"></p>
-        <h1>{quotes[0].quote}</h1>
-        <p>- {quotes[0].author} -</p>
-        <button>Save quote</button>
+        <h1 id="quoteText"></h1>
+        <p id="quoteAuthor"></p>
+        <button id="newDay">Simulate a new day</button>
       </div>
     </main>
     <script src="../javascript/script.js"></script>
