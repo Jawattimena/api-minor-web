@@ -42,6 +42,42 @@ Feedback Jad:
 
 Ik mis nog een web ai en daar moet ik iets meer voorrang aan geven zegt Jad later kan je ik kijken naar het opslaan van de quotes als ik daar nog tijd voor heb
 
+## Dag 4
+
+vandaag heb ik de prompt API toegevoegd aan het project. Ik kreeg de prompt API wel aan de praat alleen koos hij nog niet verschillende quotes.
+
+## Dag 5
+
+vandaag heb ik samen met Jad gekeken naar waar het probleem zit om de quote API juist te laten kiezen welke quote het beste past. Het blijkt dat de API maar 10 quotes heeft en dus moeilijker een keuze kan maken en sneller de zelfde quote kiest.
+
+Nu is het gelukt om de Prompt API verschillende keuzes te kunnen maken
+
+
+## Reflectie
+
+**Wat heb ik geleerd**
+
+- hoe je een prompt API werkt en hoe je doormiddel van een prompt iets kan laten gebeuren.
+- Hoe je informatie in de localstorage kan opslaan en dat kan gebruiken en dat als er informatie mist in de local storage mist dat er dan opnieuw om die informatie gevraagd word
+- Hoe je dingen uit de local storage ophaalt en laat zien in je website.
+- Dat je niet zomaar je API key online moet laten staan want anders kan het je heel veel geld kosten als het een betaalde API is.
+
+**Bevindingen**
+
+- Ik merk dat ik een astro project nog niet helemaal begrijp en dat er nog zoveel meer is in de web dev wereld dan alleen maar coderen.
+- Het web kan nog complexer zijn dan ik dacht en het is niet alleen maar coderen.
+
+**Wat vond ik het leukst**
+
+- Ik vond de localstorage en de prompt API het interesantst. om mee bezig te zijn
+    - Prompt API zou je zoveel dingen mee kunnen doen en laten gebeuren.
+    - en met de local storage kan je informatie in opslaan en die informatie verder gebruiken in de website.
+
+**Wat kan er beter**
+
+- Aangezien het voor mij best wel ingewikkeld was is het voor mij beter om het de flow en het systeem van hoe dingen moet verlopen nog beter uit te tekenen en e uit te denken. dat gaat mij veel beter helpen om een juiste structuur te maken.
+- Betere structuur in mijn code
+
 
 
 # Astro Starter Kit: Minimal
