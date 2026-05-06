@@ -145,6 +145,7 @@ async function init() {
   const quotes = JSON.parse(quotesElement.dataset.quotes);
 
   // Hier kies ik de quote met de Prompt API
+  // Bronnen: Samen met Jad opgelost om de Prompt API werkende te krijgen, en deze functie te schrijven.
   async function kiesQuoteMetAI(quotes) {
     const antwoord1 = localStorage.getItem("How do you feel right now in a few words?");
     const antwoord2 = localStorage.getItem("How would you describe your current energy level?");
