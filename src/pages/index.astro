@@ -1,7 +1,7 @@
 ---
 // Bron: Samen met Jad naar gekeken
 // index.astro (bovenin de ---blokken)
-const res = await fetch("https://api.api-ninjas.com/v2/quotes?limit=10", {
+const res = await fetch("https://api.api-ninjas.com/v2/quotes?limit=50", {
   headers: {
     "x-api-key": import.meta.env.API_KEY,
   },
@@ -14,7 +14,7 @@ const quotes = await res.json();
     <meta charset="utf-8" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="icon" href="/favicon.ico" />
-    <link rel="stylesheet" href="public/styles/style.css" />
+    <link rel="stylesheet" href="/styles/style.css" />
     <meta name="viewport" content="width=device-width" />
     <meta name="generator" content={Astro.generator} />
     <title>Astro</title>

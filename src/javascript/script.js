@@ -37,13 +37,15 @@ if (savedName && savedAnswers) {
   // laat de button zien als er al een quote is gekozen
   const newDayButton = document.getElementById("newDay");
   newDayButton.style.display = "block";    
-} 
+
   const savedQuote = localStorage.getItem("dailyQuote");
   const savedAuthor = localStorage.getItem("dailyQuoteAuthor");
+
   if (savedQuote && savedAuthor) {
     document.getElementById("quoteText").textContent = JSON.parse(savedQuote);
     document.getElementById("quoteAuthor").textContent = `- ${JSON.parse(savedAuthor)} -`;
   }
+} 
 
 else if (savedName) {
   formName.style.display = "none";
@@ -94,6 +96,7 @@ async function awnsersSubmit(event) {
 function clearAnswersIfNewDay() {
   const today = new Date().toDateString();
   const lastVisit = localStorage.getItem("lastVisitDate");
+
   if (lastVisit !== today) {
   localStorage.removeItem("How do you feel right now in a few words?");
   localStorage.removeItem("How would you describe your current energy level?");
@@ -114,11 +117,11 @@ function clearAnswersIfNewDay() {
   newDayButton.style.display = "none";
   formQuestions.style.display = "flex";
 
-
   // Reset de quote tekst
   document.getElementById("quoteText").textContent = "";
   document.getElementById("quoteAuthor").textContent = "";
   }
+  localStorage.setItem("lastVisitDate", today);
 }
 
 async function init() {
