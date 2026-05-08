@@ -1,6 +1,5 @@
 import { json } from "astro:schema";
 
-clearAnswersIfNewDay();
 
 const savedName = localStorage.getItem("name");
 
@@ -18,22 +17,23 @@ document.getElementById("begroeting").textContent = `👋 ${getGreeting()} ${sav
 
 
 const savedAnswers =
-  localStorage.getItem("How do you feel right now in a few words?") &&
-  localStorage.getItem("How would you describe your current energy level?") &&
-  localStorage.getItem("Which of these emotions best matches your current mood?") &&
-  localStorage.getItem("What do you need most right now?") &&
-  localStorage.getItem("How do you feel about the near future (today / tomorrow)?");
+localStorage.getItem("How do you feel right now in a few words?") &&
+localStorage.getItem("How would you describe your current energy level?") &&
+localStorage.getItem("Which of these emotions best matches your current mood?") &&
+localStorage.getItem("What do you need most right now?") &&
+localStorage.getItem("How do you feel about the near future (today / tomorrow)?");
 
 const formName = document.querySelector("#formName");
 const formQuestions = document.querySelector("#formQuestions");
 const dailyQuote = document.querySelector("#dailyQuote");
 
+clearAnswersIfNewDay();
 
 if (savedName && savedAnswers) {
   formName.style.display = "none";
   formQuestions.style.display = "none";
   dailyQuote.style.display = "flex";
-
+  
   // laat de button zien als er al een quote is gekozen
   const newDayButton = document.getElementById("newDay");
   newDayButton.style.display = "block";    
