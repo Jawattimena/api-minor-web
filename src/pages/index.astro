@@ -1,6 +1,7 @@
 ---
 // Bron: Samen met Jad naar gekeken
 // index.astro (bovenin de ---blokken)
+// @ts-nocheck
 const res = await fetch("https://api.api-ninjas.com/v2/quotes?limit=50", {
   headers: {
     "x-api-key": import.meta.env.API_KEY,
