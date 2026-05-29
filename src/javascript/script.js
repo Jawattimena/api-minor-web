@@ -1,5 +1,8 @@
 import { json } from "astro:schema";
 
+// Global variables for AI session and quotes
+let session = null;
+let quotes = null;
 
 const savedName = localStorage.getItem("name");
 
@@ -124,39 +127,17 @@ function clearAnswersIfNewDay() {
   localStorage.setItem("lastVisitDate", today);
 }
 
-async function init() {
-  const availability = await LanguageModel.availability();
-  console.log("AI Status:", availability);
-
-  if (availability !== "available") {
-    console.log("Model nog niet klaar:", availability);
-    return;
-  }
-
-// Hier download ik de prompt API
-  const session = await LanguageModel.create({
-    expectedInputLanguages: ["en"],  
-    expectedContextLanguages: ["en"],
-    monitor(m) {
-      m.addEventListener("downloadprogress", (e) => {
-        console.log(`Downloaded ${e.loaded * 100}%`);
-      });
-    },
-  });
-
-  const quotesElement = document.getElementById("quotesData");
-  const quotes = JSON.parse(quotesElement.dataset.quotes);
-
-  // Hier kies ik de quote met de Prompt API
-  // Bronnen: Samen met Jad opgelost om de Prompt API werkende te krijgen, en deze functie te schrijven.
-  async function kiesQuoteMetAI(quotes) {
+// Hier kies ik de quote met de Prompt API
+// Bronnen: Samen met Jad opgelost om de Prompt API werkende te krijgen, en deze functie te schrijven.
+async function kiesQuoteMetAI(quotesParam) {
+  try {
     const antwoord1 = localStorage.getItem("How do you feel right now in a few words?");
     const antwoord2 = localStorage.getItem("How would you describe your current energy level?");
     const antwoord3 = localStorage.getItem("Which of these emotions best matches your current mood?");
     const antwoord4 = localStorage.getItem("What do you need most right now?");
     const antwoord5 = localStorage.getItem("How do you feel about the near future (today / tomorrow)?");
 
-    const quotesLijst = quotes
+    const quotesLijst = quotesParam
       .map((q, index) => `${index + 1}. "${q.quote}" - ${q.author}`)
       .join("\n");
 
@@ -171,28 +152,48 @@ async function init() {
 
       Hier zijn alle beschikbare quotes:
       ${quotesLijst}
-  
+
       Lees alle quotes hierboven. Kies de quote die het beste aansluit bij hoe de gebruiker zich voelt.
       Geef ALLEEN het nummer van de gekozen quote terug (bijvoorbeeld: 3).
       Geen uitleg, geen tekst, alleen het getal.`;
 
+    console.log("Prompt wordt verzonden naar AI...");
+    console.log("Session status:", session);
+    
     const antwoord = await session.prompt(prompt);
     console.log(prompt);
-    console.log(antwoord);
+    console.log("AI antwoord ontvangen:", antwoord);
     console.log(session);
 
     // Hier check ik wat de AI teruggeeft in de console
     console.log("AI antwoord (raw):", antwoord);
 
     const gekozenNummer = parseInt(antwoord.trim()) - 1;
-    console.log(gekozenNummer);
-    console.log(quotes[gekozenNummer]);
-    return quotes[gekozenNummer] || quotes[0];
-
+    console.log("Gekozen nummer:", gekozenNummer);
+    console.log("Gekozen quote object:", quotesParam[gekozenNummer]);
+    return quotesParam[gekozenNummer] || quotesParam[0];
+  } catch (error) {
+    console.error("Fout in kiesQuoteMetAI:", error);
+    console.error("Error details:", {
+      message: error.message,
+      name: error.name,
+      stack: error.stack
+    });
+    // Return eerste quote als fallback
+    return quotesParam[0] || { quote: "Alles komt goed", author: "Onbekend" };
   }
+}
 
-  // dataQuestions heeft toegang tot kiesQuoteMetAI via init()
-  async function dataQuestions() {
+// dataQuestions is nu globaal beschikbaar
+async function dataQuestions() {
+  try {
+    // Check of session en quotes beschikbaar zijn
+    if (!session || !quotes) {
+      console.error("Session of quotes nog niet geladen. Wacht even...");
+      document.getElementById("begroeting").textContent = "AI is nog aan het laden... probeer opnieuw";
+      return;
+    }
+
     const answer1 = document.getElementById("vraag-1").value;
     const answer2 = getSelectedRadioAnswer2();
     const answer3 = getSelectedRadioAnswer3();
@@ -209,8 +210,6 @@ async function init() {
     document.getElementById("begroeting").textContent = "Even geduld, er wordt een quote gekozen...";
     dailyQuote.style.display = "flex";
 
-
-
     const gekozenQuote = await kiesQuoteMetAI(quotes);
 
     // Hier log ik de volledige quote in de console
@@ -226,15 +225,60 @@ async function init() {
     document.getElementById("quoteAuthor").textContent = `- ${gekozenQuote.author} -`;
 
     const newDayButton = document.getElementById("newDay");
-    newDayButton.style.display = "block";    
+    newDayButton.style.display = "block";
+  } catch (error) {
+    console.error("Fout in dataQuestions:", error);
+    document.getElementById("begroeting").textContent = "Sorry, er is iets fout gegaan. Probeer opnieuw.";
+    dailyQuote.style.display = "none";
+    formQuestions.style.display = "flex";
   }
+}
 
-  // Overschrijf de awnsersSubmit zodat die de lokale dataQuestions gebruikt
-  if (formQuestions) {
-    formQuestions.removeEventListener("submit", awnsersSubmit);
-    formQuestions.addEventListener("submit", async (event) => {
-      event.preventDefault();
-      await dataQuestions();
+async function init() {
+  try {
+    console.log("Init gestart - AI model aan het laden...");
+    
+    const availability = await LanguageModel.availability();
+    console.log("AI Status:", availability);
+
+    if (availability !== "available") {
+      console.log("Model nog niet klaar:", availability);
+      console.log("Na 5 seconden probeer ik het opnieuw. Dit kan enige tijd duren...");
+      // Wacht 5 seconden en probeer opnieuw
+      setTimeout(init, 5000);
+      return;
+    }
+
+    console.log("Model is available, session aan het maken...");
+    
+    // Hier download ik de prompt API
+    session = await LanguageModel.create({
+      expectedInputLanguages: ["en"],  
+      expectedContextLanguages: ["en"],
+      monitor(m) {
+        m.addEventListener("downloadprogress", (e) => {
+          console.log(`Downloaded ${e.loaded * 100}%`);
+        });
+      },
+    });
+
+    console.log("Session gemaakt!");
+
+    const quotesElement = document.getElementById("quotesData");
+    if (!quotesElement) {
+      console.error("quotesData element niet gevonden!");
+      return;
+    }
+
+    quotes = JSON.parse(quotesElement.dataset.quotes);
+    console.log("Quotes geladen:", quotes.length, "quotes gevonden");
+    console.log("Init voltooid! Klaar om vragen in te vullen.");
+  } catch (error) {
+    console.error("Fout in init:", error);
+    console.error("Error details:", {
+      message: error.message,
+      name: error.name,
+      stack: error.stack
     });
   }
 }
